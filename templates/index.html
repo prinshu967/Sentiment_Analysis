@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Sentiment Analysis</title>
+    <style>
+        body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to bottom, rgb(139, 0, 88),lightpink);
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+h1, h2, h3 {
+    color: #ff6f00;
+}
+
+form {
+    max-width: 500px;
+    margin: 50px auto;
+    background: linear-gradient(to bottom, #ffffff, #f2f2f2);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+form:hover {
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+}
+
+label {
+    display: block;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #555;
+}
+
+input {
+    width: calc(100% - 20px);
+    padding: 12px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+input:focus {
+    border-color: #ffcc00;
+}
+
+button {
+    background: linear-gradient(to bottom,blue, skyblue);
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background: linear-gradient(to bottom, skyblue,blue);
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 15px;
+   font-family: monospace; 
+    font-size: 14px;
+    color:  #0d0b0e; /* Adjust the color as needed */
+    line-height: 1.6;
+    
+}
+
+li:hover {
+    font-family: monospace; 
+
+    color: #080709;
+    font-size: 18px; /* Adjust the hover color */
+}
+
+
+h2, h3 {
+    margin-top: 40px;
+    color: #ffcc00;
+}
+
+/* Additional styling for the results section */
+h3 {
+    margin-top: 30px;
+    font-size: 18px;
+}
+
+/* Styling for the sentiment analysis plot */
+img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 600px) {
+    form {
+        max-width: 90%;
+    }
+}
+
+    </style>
+</head>
+<body>
+   
+    <h1>YouTube Sentiment Analysis</h1>
+    <form method="post">
+        <label for="video_id">Enter YouTube Video ID:</label>
+        <input type="text" name="video_id" required>
+        <button type="submit">Analyze</button>
+    </form>
+
+    {% if video_id %}
+        <h2>Analysis for Video ID: {{ video_id }}</h2>
+        <h3>Sentiment Counts:</h3>
+        <ul>
+            <li>Positive: {{ sentiment_percentages['positive'] }}%</li>
+            <li>Negative: {{ sentiment_percentages['negative'] }}%</li>
+            <li>Neutral: {{ sentiment_percentages['neutral'] }}%</li>
+        </ul>
+
+        <h3>Sentiment Analysis Plot:</h3>
+        <img src="data:image/png;base64,{{ recommendations.sentiment_plot }}" alt="Sentiment Analysis Plot">
+        <h3>Top Positive Comments:</h3>
+        <ul>
+            {% for recommendation in recommendations['positive'] %}
+                <li>{{ recommendation['Comments'] }} ({{ recommendation['Compound'] }})</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Top Negative Comments:</h3>
+        <ul>
+            {% for recommendation in recommendations['negative'] %}
+                <li>{{ recommendation['Comments'] }} ({{ recommendation['Compound'] }})</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Top Neutral Comments:</h3>
+        <ul>
+            {% for recommendation in recommendations['neutral'] %}
+                <li>{{ recommendation['Comments'] }} ({{ recommendation['Compound'] }})</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
